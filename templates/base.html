@@ -1,0 +1,174 @@
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>3GPP Docs Online</title>	
+	{% load static %}
+	<link rel="stylesheet" href="{% static 'uikit.css' %}">	
+
+	<style>
+	body {
+		height: 100%;
+		padding: 0;
+		margin: 0;
+	}
+
+	header {
+		display: flex;
+		position: relative;
+		background: #3367d6;
+	}
+
+	footer {
+		position: relative;
+		background: #2f4f4f;
+		color: #fffafa;
+		padding: 1.5em;
+		text-align: center;
+	}
+
+	.controls {
+		display: flex;
+		position: relative;
+		padding: 8px;
+		#background: #d3d3d3;
+		background: #2f4f4f;
+	}
+
+	.heading-box {
+		display: inline-block;
+		margin-top: auto;
+		padding: 1em;
+		font-size: 100%;
+		color: white;
+	}
+
+	.headmenu-box {
+		display: inline-block;
+		position: absolute;
+		top: 55%;
+		right: 5%;
+		transform: translateY(-50%);
+	}	
+
+	.heading-box h1 {
+		display: inline;
+		color: white;
+	}
+
+	.headmenu-list ul {
+		padding: 0;
+		margin: 0;
+		list-style: none;
+	}
+
+	.headmenu-list li {
+		display: block;
+		padding: 0;
+		margin: 0;
+		float: left;
+		width: 80px;
+	}
+
+	.headmenu-list a {
+		padding: 10px 25px;
+		font-size: 16px;
+		color: white;
+		text-decoration: none;
+	}
+
+	.headmenu-list li:hover  {
+		background: gray;
+	}
+
+	footer p {
+		display: inline;
+	}
+	
+	table { font-size: 13px; }
+
+	</style>	
+	
+	<script type="text/javascript">
+		function showTdoc(tdoc_file) {
+			tdoc_file = tdoc_file.replace(/:/g, "%3A").replace(/\//g, "%2F");
+			microsoft_url = "https://view.officeapps.live.com/op/view.aspx?src=";
+			document.getElementById('docframe').src = microsoft_url + tdoc_file;
+		}
+		
+		function enableFilterButton() {
+			alert("enabled");
+			document.getElementById('filter_tdoclist').disabled = false;
+		}
+	</script>
+</head>
+<body>
+	<header>
+		<div class="heading-box">
+			<h1>3GPP Docs Online</h1>
+		</div>
+		<div class="headmenu-box">
+			<nav class="headmenu-list">
+			<ul>
+				<li><a href="/">Home</a></li>
+				<li><a href="#">About</a></li>
+			</ul>
+			</nav>
+		</div>
+	</header>
+
+	<div class="controls">
+		<form class="uk-form-horizontal" style="margin-bottom:auto; width: 100%" method="get">
+			<div class="uk-grid">
+				<div class="uk-width-3-10 uk-text-left">
+					{{ tdoc_form.work_group }}
+					{{ tdoc_form.meeting_no }}
+					<button name="load_tdoclist" class="uk-button uk-button-primary uk-button-small">Load Tdoclist</button>
+				</div>
+				<div class="uk-width-7-10 uk-text-right">
+					{{ tdoc_form.tdoc_source }}
+					{{ tdoc_form.tdoc_agenda_item }}
+					{{ tdoc_form.tdoc_workitem }}
+					{{ tdoc_form.tdoc_release }}
+					{{ tdoc_form.tdoc_type }}
+					<button name="filter_tdoclist" id="filter_tdoclist" class="uk-button uk-button-primary uk-button-small" >Filter Tdocs</button>
+				</div>
+	
+		</div>	
+		</form>
+	</div>
+
+
+	<div class="uk-grid">
+		<div class="uk-width-3-10">
+			<div class="uk-scrollable-box">
+				<table class="uk-table uk-table-striped uk-table-condensed" >
+				<tbody>
+					{% for tdoc in tdoc_list %}
+					<tr>
+						<td class="uk-width-1-3"> 
+						{% if tdoc.tdoc_exist %} <a href="{{ tdoc.tdoc_file }}" onclick="showTdoc(this.href); return false;"> {% endif %} 
+							{{ tdoc.tdoc_number }}
+						{% if tdoc.tdoc_exist %} </a> {% endif %}
+						</td>
+						<td class="uk-width-2-3"> {{ tdoc.tdoc_source }} </td>
+					</tr>
+					{% endfor %}
+				</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="uk-panel uk-width-7-10">
+			<div class="uk-overlay-panel" style="background:white; height: 18px;"></div>
+			<iframe id="docframe" width="100%" height="100%" src=""></iframe>
+		</div>
+	</div>
+
+	<footer>
+		<p>Hope you find it useful.</p>
+	</footer>
+
+	{% block content %}
+	{% endblock %}
+
+</body>
