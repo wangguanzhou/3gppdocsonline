@@ -7,6 +7,7 @@ from tdocsonline.forms import *
 
 SITE_ROOT = '/var/www/xgppdocsonline.com/'
 DOCS_ROOT = 'docs/'
+REPORTS_ROOT = 'reports/'
 
 def homepage(request):
 	context = {}
@@ -40,13 +41,24 @@ def homepage(request):
 		# change of 'work_group' dropdown selection has triggered this request.
 			context['tdoc_form'] = set_tdoc_form(selected_work_group, '')
 			return render(request, 'index.html', context)
+		
+		return render(request, 'showtdocs.html', context)
+	else:
+		context['tdoc_form'] = set_tdoc_form('', '')
+		return render(request, 'index.html', context)
+
+	
+def showreports(request):
+	context = {}
+	if request.GET:
+		selected_work_group = request.GET['work_group']
+		context['tdoc_form'] = set_tdoc_form(selected_work_group, '')
+		context['report_list'] = populate_report_list(selected_work_group)
 
 	else:
 		context['tdoc_form'] = set_tdoc_form('', '')
 
-	return render(request, 'index.html', context)
-
-	
+	return render(request, 'showreports.html', context)	
 
 
 def set_tdoc_form(selected_work_group, selected_meeting_no):
@@ -129,6 +141,28 @@ def enable_tdoc_filters(tdoc_form):
 	tdoc_form.fields['tdoc_release'].widget.attrs.pop('disabled', 'none')
 	tdoc_form.fields['tdoc_type'].widget.attrs.pop('disabled', 'none')
 
+def populate_report_list(workgroup):
+	report_list = []	
+	for meeting in MEETING_REPORT_LIST[workgroup]:
+		report = {}
+		report['name'] = workgroup + '-' + meeting + '-report'
+		report_file1 = SITE_ROOT + REPORTS_ROOT + report['name'] + '.docx' 
+		report_file2 = SITE_ROOT + REPORTS_ROOT + report['name'] + '.doc' 
+		if os.path.exists(report_file1):
+			report['exist'] = True
+			report['file'] = report_file1[len(SITE_ROOT):]
+		elif os.path.exists(report_file2):
+			report['exist'] = True
+			report['file'] = report_file2[len(SITE_ROOT):]
+		else:
+			report['exist'] = False
+			report['file'] = ''
+
+		report_list.append(report)
+	
+	return report_list
+			
+		
 def populate_tdoc_list(workgroup, meetingno, tdoc_filters):
 	tdoc_list = []
 		
@@ -150,21 +184,25 @@ def populate_tdoc_list(workgroup, meetingno, tdoc_filters):
 		if tdoc_filters['tdoc_type'] != 'All':
 			tdoclist_objects = tdoclist_objects.filter(tdoc_type__icontains=tdoc_filters['tdoc_type'])
 
-
-
-
-
 		for tdoc in tdoclist_objects:
 			tdoc_number = tdoc.tdoc_number
 			tdoc_source = tdoc.tdoc_source	
 			tdoc_file1 = tdoc_path + tdoc_number +'.doc'
 			tdoc_file2 = tdoc_path + tdoc_number +'.docx'
+			tdoc_file3 = tdoc_path + tdoc_number +'.pdf'
+			tdoc_file4 = tdoc_path + tdoc_number +'.pptx'
 			if os.path.exists(tdoc_file1):
 				tdoc_exist = True
 				tdoc_file = tdoc_file1[len(SITE_ROOT):]
 			elif os.path.exists(tdoc_file2):
 				tdoc_exist = True
 				tdoc_file = tdoc_file2[len(SITE_ROOT):]
+			elif os.path.exists(tdoc_file3):
+				tdoc_exist = True
+				tdoc_file = tdoc_file3[len(SITE_ROOT):]
+			elif os.path.exists(tdoc_file4):
+				tdoc_exist = True
+				tdoc_file = tdoc_file4[len(SITE_ROOT):]
 			else:
 				tdoc_exist = False
 				tdoc_file = ''

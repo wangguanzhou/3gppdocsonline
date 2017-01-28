@@ -21,6 +21,7 @@ from tdocsonline import views
 
 urlpatterns = [
 	url(r'^$', views.homepage),
+	url(r'^showreports/', views.showreports),
     url(r'^admin/', admin.site.urls),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

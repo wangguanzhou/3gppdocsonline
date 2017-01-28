@@ -17,7 +17,7 @@ import xlrd
 from django.conf import settings
 from tdocsonline.models import *
 
-TDOCLIST_ROOT = '/home/tawayee/3gpp-docs/'
+TDOCLIST_ROOT = '/home/tawayee/3gpp-docs/tdoclists/'
 
 meeting = input('Please enter the 3GPP meeting number: ')
 working_group = meeting.split('-')[0]
@@ -25,7 +25,7 @@ meeting_no = meeting.split('-')[1]
 print('The Working Group is: ', working_group)
 print('The meeting number is: ', meeting_no)
 
-tdlist_file = TDOCLIST_ROOT + working_group + '/' + meeting + '/' + meeting + '.xls'
+tdlist_file = TDOCLIST_ROOT + meeting + '.xls'
 print(tdlist_file)
 
 if os.path.exists(tdlist_file):

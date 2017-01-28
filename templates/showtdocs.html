@@ -23,9 +23,28 @@
 
 {% endblock %}
 
+{% block DocList %}
+
+<table class="uk-table uk-table-striped uk-table-condensed" >
+	<tbody>
+	{% for tdoc in tdoc_list %}
+		<tr>
+			<td class="uk-width-1-3"> 
+			{% if tdoc.tdoc_exist %}
+				<a href="{{ tdoc.tdoc_file }}" onclick="showTdoc(this.href); return false;">
+			{% endif %}
+				{{ tdoc.tdoc_number }}
+			{% if tdoc.tdoc_exist %} </a> {% endif %}
+			</td>
+			<td class="uk-width-2-3"> {{ tdoc.tdoc_source }} </td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>
+
+{% endblock %}
+
 
 {% block DocFrame %}
-	<div style="padding: 120px;">
-	<iframe id="docframe" width="100%" height="100%" src="/static/guide.html"></iframe>
-	</div>
+	<iframe id="docframe" width="100%" height="100%" src=""></iframe>
 {% endblock %}

@@ -8,10 +8,13 @@ WORKGROUP_CHOICES = (
 SA2_MEETING_CHOICES = (
 	('118bis', '118bis'),
 	('118', '118'),
+	('117', '117'),
 )
 
 RAN2_MEETING_CHOICES = (
 	('AH_NR1', 'AH_NR1'),
+	('96', '96'),
+	('95bis', '95bis'),
 )
 
 
@@ -37,3 +40,19 @@ class TdocFilterForm(forms.Form):
 				   widget=forms.Select(attrs={'class': 'uk-select uk-form-width-small uk-form-small'}))
 	tdoc_type = forms.ChoiceField(choices=(), label='', \
 				widget=forms.Select(attrs={'class': 'uk-select uk-form-width-small uk-form-small'}))
+
+
+MEETING_REPORT_LIST = {
+	'SA2': ['118bis',
+			'118',
+			'117',
+			'116bis',
+			'116',
+			'115',
+			'114',
+			'113',
+			],
+	'RAN2':['',
+			],
+}
+			
